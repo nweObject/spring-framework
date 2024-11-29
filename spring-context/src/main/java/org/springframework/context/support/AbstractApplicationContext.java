@@ -555,13 +555,26 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		synchronized (this.startupShutdownMonitor) {
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
-			// Prepare this context for refreshing.
+			/**
+			 * 容器刷新前的准备工作
+			 * 1、设置容器启动时间
+			 * 2、设置标志位 关闭状态为false 活跃状态为true
+			 * 3、获取环境对象，并加载当前系统属性到环境对想Environment中
+			 * 4、初始化监听容器和事件容器
+			 * */
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			/**
+			 * 创建工厂容器对象：DefaultListableBeanFactory
+			 * 加载配置文件到当前beanFactory中为BeanDefinition
+			 * */
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			/**
+			 * beanFactory准备工作,对beanFactory容器进行一些属性填充
+			 * */
 			prepareBeanFactory(beanFactory);
 
 			try {
@@ -570,9 +583,18 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 				// Invoke factory processors registered as beans in the context.
+				/**
+				 * 执行beanFactoryPostProcessor
+				 * */
 				invokeBeanFactoryPostProcessors(beanFactory);
 				// Register bean processors that intercept bean creation.
+				/**
+				 * bean初始化操作前置准备工作
+				 * */
 				registerBeanPostProcessors(beanFactory);
+				/**
+				 * 空方法未做任何操作
+				 * */
 				beanPostProcess.end();
 
 				// Initialize message source for this context.
@@ -639,10 +661,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 
 		// Initialize any placeholder property sources in the context environment.
+		/**
+		 * 空方法留给子类扩展
+		 * */
 		initPropertySources();
 
 		// Validate that all properties marked as required are resolvable:
 		// see ConfigurablePropertyResolver#setRequiredProperties
+		/**
+		 * 获取环境对象，验证需要的属性文件是否都放入环境中
+		 * */
 		getEnvironment().validateRequiredProperties();
 
 		// Store pre-refresh ApplicationListeners...
@@ -676,7 +704,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * @see #getBeanFactory()
 	 */
 	protected ConfigurableListableBeanFactory obtainFreshBeanFactory() {
+		//初始化beanFactory,并进行XML文件读取，并将得到的beanFactory记录到当前实体属性中
 		refreshBeanFactory();
+		//返回当前的beanFactory实体属性
 		return getBeanFactory();
 	}
 
