@@ -138,7 +138,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
 			throws BeansException {
 		/**
-		 * 调用构造器，进行相关对象创建操作
+		 * 调用构造器，进行相关对象创建操作,注入了资源解析处理器
 		 * */
 		super(parent);
 		/**

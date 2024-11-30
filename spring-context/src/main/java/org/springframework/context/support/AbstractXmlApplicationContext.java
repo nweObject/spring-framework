@@ -81,17 +81,41 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
 		// Create a new XmlBeanDefinitionReader for the given BeanFactory.
+		/**
+		 * 适配器模式创建了一个XmlBeanDefinitionReader
+		 * 内部注册了一个BeanDefinitionRegistry源对象，实际为DefaultListableBeanFactory
+		 * */
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
 		// Configure the bean definition reader with this context's
 		// resource loading environment.
 		beanDefinitionReader.setEnvironment(getEnvironment());
+		//将自身作为资源加载器 xml启动为classPathXmlApplicationContext
 		beanDefinitionReader.setResourceLoader(this);
+		/**
+		 * 用于读取本地标签库 注册了dtd xsd解析器
+		 * this.dtdResolver = new BeansDtdResolver();
+		 * this.schemaResolver = new PluggableSchemaResolver(classLoader);
+		 * */
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
 		// Allow a subclass to provide custom initialization of the reader,
 		// then proceed with actually loading the bean definitions.
 		initBeanDefinitionReader(beanDefinitionReader);
+		/**
+		 * xml启动解析方式：
+		 * 1、获取配置文件 configLocations  beanDefinitionReader.loadBeanDefinitions(String[])
+		 * 2、loadBeanDefinitions(location)
+		 * 3、loadBeanDefinitions(location, null)
+		 * 4、将文件地址转化为Resource[] loadBeanDefinitions(resources);
+		 * 5、loadBeanDefinitions(resource);
+		 * 6、loadBeanDefinitions(new EncodedResource(resource));
+		 * 7、doLoadBeanDefinitions(inputSource, encodedResource.getResource())
+		 * 8、读取资源文件为DOCUMENT对象 Document doc = doLoadDocument(inputSource, resource);
+		 * 注册BeanDefinition documentReader.registerBeanDefinitions(doc, createReaderContext(resource));
+		 * 9、将节点元素根据规则解析成BeanDefinitionHolder对象
+		 * 注册BeanDefinition到DefaultListableBeanFactory BeanDefinitionMap BeanDefinitionNames alis中
+		 * */
 		loadBeanDefinitions(beanDefinitionReader);
 	}
 
@@ -125,6 +149,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableC
 		if (configResources != null) {
 			reader.loadBeanDefinitions(configResources);
 		}
+		//配置文件方式加载
 		String[] configLocations = getConfigLocations();
 		if (configLocations != null) {
 			reader.loadBeanDefinitions(configLocations);

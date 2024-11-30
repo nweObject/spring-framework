@@ -20,8 +20,8 @@ public class Main {
 //		Logger log = LoggerFactory.getLogger(Main.class);
 		ApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("Beans.xml");
 		Object person = classPathXmlApplicationContext.getBean("person");
-		System.out.println(person);
-//		log.debug("person:{}", person);
-		ArrayList<String> strings = new ArrayList<>();
+//		System.out.println(person);
+////		log.debug("person:{}", person);
+//		ArrayList<String> strings = new ArrayList<>();
 	}
 }
