@@ -432,7 +432,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 	 * @see DocumentLoader#loadDocument
 	 */
 	protected Document doLoadDocument(InputSource inputSource, Resource resource) throws Exception {
-		//getEntityResolver() 在AbstractXmlApplicationContext loadBeanDefinitions方法中对EntityResolver属性进行了赋值->ResourceEntityResolver
+		/**
+		 *getEntityResolver() 在AbstractXmlApplicationContext loadBeanDefinitions方法中对EntityResolver属性
+		 * 进行了赋值->ResourceEntityResolver
+		 */
 		return this.documentLoader.loadDocument(inputSource, getEntityResolver(), this.errorHandler,
 				getValidationModeForResource(resource), isNamespaceAware());
 	}
