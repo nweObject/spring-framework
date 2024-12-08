@@ -84,33 +84,41 @@ abstract class ConfigurationClassUtils {
 	 */
 	public static boolean checkConfigurationClassCandidate(
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
-
+		//获取BeanDefinition className
 		String className = beanDef.getBeanClassName();
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
 
 		AnnotationMetadata metadata;
+		//判断是否是注解的BeanDefinition
 		if (beanDef instanceof AnnotatedBeanDefinition &&
 				className.equals(((AnnotatedBeanDefinition) beanDef).getMetadata().getClassName())) {
 			// Can reuse the pre-parsed metadata from the given BeanDefinition...
+			//进行AnnotatedBeanDefinition强转获取Metadata属性
 			metadata = ((AnnotatedBeanDefinition) beanDef).getMetadata();
 		}
+		//判断是否是AbstractBeanDefinition
 		else if (beanDef instanceof AbstractBeanDefinition && ((AbstractBeanDefinition) beanDef).hasBeanClass()) {
 			// Check already loaded Class if present...
 			// since we possibly can't even load the class file for this Class.
+			//进行强转
 			Class<?> beanClass = ((AbstractBeanDefinition) beanDef).getBeanClass();
+			//本地方法，Class对象是下面任意一种那么直接返回
 			if (BeanFactoryPostProcessor.class.isAssignableFrom(beanClass) ||
 					BeanPostProcessor.class.isAssignableFrom(beanClass) ||
 					AopInfrastructureBean.class.isAssignableFrom(beanClass) ||
 					EventListenerFactory.class.isAssignableFrom(beanClass)) {
 				return false;
 			}
+			//new StandardAnnotationMetadata
 			metadata = AnnotationMetadata.introspect(beanClass);
 		}
 		else {
 			try {
+				//通过className获取MetadataReader
 				MetadataReader metadataReader = metadataReaderFactory.getMetadataReader(className);
+				//MetadataReader获取 AnnotationMetadata
 				metadata = metadataReader.getAnnotationMetadata();
 			}
 			catch (IOException ex) {
@@ -121,15 +129,18 @@ abstract class ConfigurationClassUtils {
 				return false;
 			}
 		}
-
+		//检测是否是Configuration类
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 		if (config != null && !Boolean.FALSE.equals(config.get("proxyBeanMethods"))) {
+			//如果bean被@Configuration标注，并且不是proxyBeanMethods将bean定义为full
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_FULL);
 		}
 		else if (config != null || isConfigurationCandidate(metadata)) {
+			//如果被@Configuration标注或者被@Bean,@Component,@ComponentScan,@Import,@ImportResource标注的方法将bean定义为lite
 			beanDef.setAttribute(CONFIGURATION_CLASS_ATTRIBUTE, CONFIGURATION_CLASS_LITE);
 		}
 		else {
+			//否则返回false
 			return false;
 		}
 

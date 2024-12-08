@@ -1,6 +1,8 @@
 package org.springframework;
 
 //import com.sun.org.slf4j.internal.*;
+import org.springframework.com.zy.FBTest;
+import org.springframework.com.zy.Person;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -19,9 +21,8 @@ public class Main {
 	public static void main(String[] args) {
 //		Logger log = LoggerFactory.getLogger(Main.class);
 		ApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("Beans.xml");
-		Object person = classPathXmlApplicationContext.getBean("person");
-//		System.out.println(person);
-////		log.debug("person:{}", person);
-//		ArrayList<String> strings = new ArrayList<>();
+		Object person = classPathXmlApplicationContext.getBean("person", Person.class);
+		Object bean = classPathXmlApplicationContext.getBean("&myFactoryBean");
+		FBTest myFactoryBean = (FBTest)classPathXmlApplicationContext.getBean("myFactoryBean");
 	}
 }
