@@ -11,10 +11,10 @@ import org.springframework.context.annotation.Configuration;
  * @author zy
  * @version 1.0.0
  */
-@Configuration
+//@Configuration
 public class ConfigClass {
 
-	@Bean
+//	@Bean
 	public ConfigTest configTest() {
 		return new ConfigTest();
 	}

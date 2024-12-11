@@ -262,12 +262,20 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		this.injectionMetadataCache.remove(beanName);
 	}
 
+	/**
+	 * 获取构造器集合
+	 * 如果有多个Autowired ,required为true，不管有没有默认构造器都会报异常
+	 * 如果有一个Autowire，required为false,没有默认构造器会报警告，
+	 * 如果没有Autowire,有多个构造器，没有无参构造器，会报错，
+	 * 其他情况都可以，但是以@Autowired优先，其次是无参构造器
+	 * */
 	@Override
 	@Nullable
 	public Constructor<?>[] determineCandidateConstructors(Class<?> beanClass, final String beanName)
 			throws BeanCreationException {
 
 		// Let's check for lookup methods here...
+		//处理@Lookup注解，如果集合中没有beanName, 则走一遍bean中的所有方法，过滤是否有lookup
 		if (!this.lookupMethodsChecked.contains(beanName)) {
 			if (AnnotationUtils.isCandidateClass(beanClass, Lookup.class)) {
 				try {
@@ -302,14 +310,17 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 		}
 
 		// Quick check on the concurrent map first, with minimal locking.
+		//从缓存中获取构造器
 		Constructor<?>[] candidateConstructors = this.candidateConstructorsCache.get(beanClass);
 		if (candidateConstructors == null) {
 			// Fully synchronized resolution now...
 			synchronized (this.candidateConstructorsCache) {
 				candidateConstructors = this.candidateConstructorsCache.get(beanClass);
+				//双重检查
 				if (candidateConstructors == null) {
 					Constructor<?>[] rawCandidates;
 					try {
+						//获取所有构造器
 						rawCandidates = beanClass.getDeclaredConstructors();
 					}
 					catch (Throwable ex) {

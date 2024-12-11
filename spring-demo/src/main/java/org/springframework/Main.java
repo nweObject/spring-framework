@@ -22,7 +22,7 @@ public class Main {
 //		Logger log = LoggerFactory.getLogger(Main.class);
 		ApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("Beans.xml");
 		Object person = classPathXmlApplicationContext.getBean("person", Person.class);
-		Object bean = classPathXmlApplicationContext.getBean("&myFactoryBean");
-		FBTest myFactoryBean = (FBTest)classPathXmlApplicationContext.getBean("myFactoryBean");
+//		Object bean = classPathXmlApplicationContext.getBean("&myFactoryBean");
+//		FBTest myFactoryBean = (FBTest)classPathXmlApplicationContext.getBean("myFactoryBean");
 	}
 }

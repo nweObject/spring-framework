@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * @author zy
  * @version 1.0.0
  */
-@Component
+//@Component
 public class A implements ApplicationContextAware {
 
 	private ApplicationContext applicationContext;

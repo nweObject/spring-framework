@@ -44,6 +44,7 @@ public interface InstantiationStrategy {
 	 * @param owner the owning BeanFactory
 	 * @return a bean instance for this bean definition
 	 * @throws BeansException if the instantiation attempt failed
+	 * 默认无参构造器
 	 */
 	Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner)
 			throws BeansException;
@@ -60,6 +61,7 @@ public interface InstantiationStrategy {
 	 * @param args the constructor arguments to apply
 	 * @return a bean instance for this bean definition
 	 * @throws BeansException if the instantiation attempt failed
+	 * 指定构造器
 	 */
 	Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			Constructor<?> ctor, Object... args) throws BeansException;
@@ -78,6 +80,7 @@ public interface InstantiationStrategy {
 	 * @param args the factory method arguments to apply
 	 * @return a bean instance for this bean definition
 	 * @throws BeansException if the instantiation attempt failed
+	 * 通过factoryMethod 通过指定工厂方法来处理
 	 */
 	Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			@Nullable Object factoryBean, Method factoryMethod, Object... args)

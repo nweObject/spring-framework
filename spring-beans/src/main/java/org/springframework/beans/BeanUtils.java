@@ -198,18 +198,25 @@ public abstract class BeanUtils {
 				return KotlinDelegate.instantiateClass(ctor, args);
 			}
 			else {
+				//构造器获取参数类型列表
 				Class<?>[] parameterTypes = ctor.getParameterTypes();
+				//入参列表长度是否小于等于构造器参数列表长度
 				Assert.isTrue(args.length <= parameterTypes.length, "Can't specify more arguments than constructor parameters");
+				//初始化构造器参数数组
 				Object[] argsWithDefaultValues = new Object[args.length];
+				//遍历入参对构造器参数进行赋值
 				for (int i = 0 ; i < args.length; i++) {
 					if (args[i] == null) {
+						//如果入参为空，获取此入参对应构造器的参数类型
 						Class<?> parameterType = parameterTypes[i];
+						//判断类型是否为基础类型，如果是给默认值，否为null
 						argsWithDefaultValues[i] = (parameterType.isPrimitive() ? DEFAULT_TYPE_VALUES.get(parameterType) : null);
 					}
 					else {
 						argsWithDefaultValues[i] = args[i];
 					}
 				}
+				//创建对象
 				return ctor.newInstance(argsWithDefaultValues);
 			}
 		}

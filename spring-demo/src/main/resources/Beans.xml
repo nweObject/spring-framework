@@ -10,8 +10,8 @@
 	<bean name="person" class="org.springframework.com.zy.Person">
 		<property name="color" value="yellow"></property>
 	</bean>
-	<bean name="user" class="org.springframework.com.zy.User" parent="person">
-		<property name="userName" value="张三"></property>
-		<property name="age" value="18"></property>
-	</bean>
+<!--	<bean name="user" class="org.springframework.com.zy.User" parent="person">-->
+<!--		<property name="userName" value="张三"></property>-->
+<!--		<property name="age" value="18"></property>-->
+<!--	</bean>-->
 </beans>
